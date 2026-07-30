@@ -1,28 +1,37 @@
 # Ubuntu XRDP Enterprise
 
-Installer automatizzato per configurare XRDP e XFCE su Ubuntu Desktop 26.04.
+Installer automatizzato per configurare un ambiente **XRDP multiutente con XFCE e Xorg** su Ubuntu Desktop 26.04.
+
+Il progetto nasce dal troubleshooting di workstation Ubuntu con GNOME, Wayland e GPU NVIDIA, dove GNOME Remote Desktop o una configurazione XRDP standard potevano produrre schermate nere o chiusure immediate della sessione.
 
 ## Funzionalità
 
 - Installa XRDP, xorgxrdp e XFCE
-- Configura sessioni Xorg multiutente
-- Disabilita GNOME Remote Desktop sulla porta 3389
-- Configura gli utenti esistenti e futuri
-- Evita il crash di `xiccd` nelle sessioni remote
+- Configura sessioni remote XFCE su Xorg
+- Supporta più utenti Linux con sessioni indipendenti
+- Configura gli utenti esistenti e quelli creati successivamente
+- Disabilita GNOME Remote Desktop per liberare la porta TCP 3389
+- Ripristina i pacchetti necessari
+- Evita il crash di `xiccd` nelle sessioni virtuali
 - Crea backup dei file modificati
-- Registra l'installazione in un file di log
-- Verifica servizi e porta RDP al termine
+- Registra le operazioni in un file di log
+- Verifica servizi, pacchetti e porta RDP al termine
+- Può essere eseguito nuovamente senza dover ripristinare manualmente la macchina
 
-## Requisiti
+## Compatibilità verificata
 
 - Ubuntu Desktop 26.04
-- Accesso amministrativo con `sudo`
-- Connessione a Internet per l'installazione dei pacchetti
-- Client RDP, ad esempio Connessione Desktop remoto di Windows
+- XRDP con xorgxrdp
+- XFCE
+- Microsoft Remote Desktop Connection (`mstsc`)
+- Workstation con GPU NVIDIA RTX Ada
 
-## Installazione
+> [!IMPORTANT]
+> Lo script è stato sviluppato e verificato su Ubuntu Desktop 26.04. Su altre versioni di Ubuntu potrebbe richiedere adattamenti.
 
-Scaricare lo script dal repository:
+## Installazione rapida
+
+Scaricare lo script:
 
 ```bash
 wget https://raw.githubusercontent.com/Quelmarco/ubuntu-xrdp-enterprise/main/install.sh
@@ -34,70 +43,184 @@ Renderlo eseguibile:
 chmod +x install.sh
 ```
 
-Eseguirlo:
+Avviarlo con privilegi amministrativi:
 
 ```bash
 sudo ./install.sh
 ```
 
-Per disabilitare anche Wayland nella sessione locale:
+In alternativa:
+
+```bash
+sudo bash install.sh
+```
+
+## Opzione per disabilitare Wayland
+
+XRDP crea una propria sessione Xorg, quindi normalmente non è necessario disabilitare Wayland per il desktop locale.
+
+Quando richiesto:
 
 ```bash
 sudo ./install.sh --disable-wayland
 ```
 
-La disabilitazione di Wayland non è normalmente necessaria per XRDP.
-
 ## Connessione da Windows
 
-Aprire:
+1. Aprire **Connessione Desktop remoto** premendo `Win + R`.
+2. Digitare:
 
-```text
-mstsc
-```
+   ```text
+   mstsc
+   ```
 
-Inserire l'indirizzo IP o il nome host della macchina Ubuntu.
+3. Inserire l’indirizzo IP o il nome host della macchina Ubuntu.
+4. Nella schermata di XRDP selezionare:
 
-Nella schermata di XRDP scegliere:
+   ```text
+   Session: Xorg
+   ```
 
-```text
-Session: Xorg
-```
+5. Accedere con nome utente e password dell’account Linux.
 
-Accedere con il nome utente e la password dell'account Linux.
-
-## Note multiutente
+## Utilizzo multiutente
 
 Ogni persona deve utilizzare un account Linux distinto.
 
-È preferibile non usare contemporaneamente lo stesso account sia nella sessione locale sia tramite XRDP.
+È preferibile non utilizzare contemporaneamente lo stesso account:
+
+- in una sessione grafica locale;
+- in una sessione XRDP.
+
+Per creare un nuovo utente:
+
+```bash
+sudo adduser nomeutente
+```
+
+Gli utenti creati dopo l’installazione erediteranno automaticamente la configurazione XRDP tramite `/etc/skel`.
+
+## Componenti configurati
+
+Lo script interviene principalmente su:
+
+```text
+/etc/xrdp/startwm.sh
+/etc/skel/.xsession
+/etc/skel/.config/autostart/xiccd.desktop
+```
+
+Per gli utenti esistenti configura inoltre:
+
+```text
+~/.xsession
+~/.config/autostart/xiccd.desktop
+```
 
 ## Log
 
-Il log dell'installazione viene salvato in:
+Il log dell’installazione viene salvato in:
 
 ```text
 /var/log/xrdp-xfce-setup.log
 ```
 
+## Backup
+
+Prima di modificare i file di sistema, lo script crea backup con data e ora in:
+
+```text
+/var/backups/xrdp-xfce/
+```
+
 ## Controlli utili
+
+Stato dei servizi:
 
 ```bash
 systemctl status xrdp xrdp-sesman --no-pager
 ```
 
-```bash
-ss -ltnp | grep 3389
-```
+Verifica della porta RDP:
 
 ```bash
-journalctl -u xrdp -u xrdp-sesman -n 100 --no-pager
+sudo ss -ltnp | grep 3389
 ```
 
-## Compatibilità verificata
+Log recenti:
 
-- Ubuntu Desktop 26.04
-- XRDP con sessione Xorg
-- XFCE
-- Client RDP Microsoft Windows
-- Workstation NVIDIA RTX Ada
+```bash
+sudo journalctl -u xrdp -u xrdp-sesman -n 100 --no-pager
+```
+
+Verifica del processo in ascolto:
+
+```bash
+sudo ss -ltnp | grep xrdp
+```
+
+## Risoluzione dei problemi
+
+### La sessione si chiude dopo il login
+
+Controllare:
+
+```bash
+cat ~/.xorgxrdp.*.log
+cat ~/.xsession-errors
+```
+
+Assicurarsi che il file `/etc/xrdp/startwm.sh` avvii direttamente XFCE.
+
+### Schermata nera
+
+Verificare che:
+
+- nella schermata XRDP sia selezionata la sessione `Xorg`;
+- `xorgxrdp` sia installato;
+- l’utente non abbia già una sessione grafica locale problematica;
+- GNOME Remote Desktop non stia usando la porta 3389.
+
+```bash
+dpkg -l | grep xorgxrdp
+sudo ss -ltnp | grep 3389
+```
+
+### Errore relativo a xiccd
+
+`xiccd` non è necessario nelle normali sessioni virtuali XRDP. Lo script ne disabilita l’avvio automatico per evitare il messaggio:
+
+```text
+The application xiccd has closed unexpectedly
+```
+
+## Sicurezza
+
+XRDP espone per impostazione predefinita la porta TCP 3389.
+
+Per ambienti raggiungibili da Internet si raccomanda di:
+
+- non pubblicare direttamente la porta 3389;
+- utilizzare una VPN;
+- limitare l’accesso tramite firewall;
+- utilizzare password robuste;
+- mantenere il sistema aggiornato.
+
+## Limitazioni
+
+- Le sessioni XRDP utilizzano XFCE, non il desktop GNOME locale.
+- L’accelerazione della GPU fisica non è garantita nelle sessioni XRDP.
+- Il progetto non configura automaticamente VPN, NAT o port forwarding.
+- L’uso simultaneo dello stesso account in locale e da remoto può generare conflitti di sessione.
+
+## Licenza
+
+Questo progetto è distribuito con licenza MIT.
+
+## Contributi
+
+Segnalazioni, correzioni e miglioramenti sono benvenuti tramite Issues e Pull Requests.
+
+## Ringraziamenti
+
+Il progetto nasce durante la configurazione e il troubleshooting di workstation Ubuntu 26.04 multiutente con GPU NVIDIA RTX Ada e client RDP Microsoft Windows.
