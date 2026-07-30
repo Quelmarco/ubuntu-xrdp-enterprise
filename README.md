@@ -34,25 +34,25 @@ Il progetto nasce dal troubleshooting di workstation Ubuntu con GNOME, Wayland e
 Scaricare lo script:
 
 ```bash
-wget https://raw.githubusercontent.com/Quelmarco/ubuntu-xrdp-enterprise/main/install.sh
+wget https://raw.githubusercontent.com/Quelmarco/ubuntu-xrdp-enterprise/main/setup-xrdp-xfce.sh
 ```
 
 Renderlo eseguibile:
 
 ```bash
-chmod +x install.sh
+chmod +x setup-xrdp-xfce.sh
 ```
 
 Avviarlo con privilegi amministrativi:
 
 ```bash
-sudo ./install.sh
+sudo ./setup-xrdp-xfce.sh
 ```
 
 In alternativa:
 
 ```bash
-sudo bash install.sh
+sudo bash setup-xrdp-xfce.sh
 ```
 
 ## Opzione per disabilitare Wayland
@@ -62,7 +62,7 @@ XRDP crea una propria sessione Xorg, quindi normalmente non è necessario disabi
 Quando richiesto:
 
 ```bash
-sudo ./install.sh --disable-wayland
+sudo ./setup-xrdp-xfce.sh --disable-wayland
 ```
 
 ## Connessione da Windows
