@@ -1,0 +1,22 @@
+#!/bin/sh
+
+unset DBUS_SESSION_BUS_ADDRESS
+unset SESSION_MANAGER
+unset WAYLAND_DISPLAY
+unset XDG_SESSION_DESKTOP
+unset XDG_CURRENT_DESKTOP
+unset DESKTOP_SESSION
+unset GDMSESSION
+
+export XDG_SESSION_TYPE=x11
+export XDG_CURRENT_DESKTOP=XFCE
+export XDG_SESSION_DESKTOP=xfce
+export DESKTOP_SESSION=xfce
+export GDMSESSION=xfce
+export GTK_USE_PORTAL=0
+
+if command -v dbus-run-session >/dev/null 2>&1; then
+    exec dbus-run-session -- startxfce4
+fi
+
+exec startxfce4
