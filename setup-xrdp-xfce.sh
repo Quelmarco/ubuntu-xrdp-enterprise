@@ -319,38 +319,16 @@ fi
 # Global XRDP window-manager script
 ###############################################################################
 
-info "Configuring /etc/xrdp/startwm.sh..."
+info "Installing XRDP session launcher..."
 
-cat > /etc/xrdp/startwm.sh <<'EOF'
-#!/bin/sh
-#
-# Managed XRDP session launcher.
-# XRDP sessions use XFCE on Xorg independently of the local GNOME session.
-#
+install \
+    -m 0755 \
+    -o root \
+    -g root \
+    "$STARTWM_SOURCE" \
+    /etc/xrdp/startwm.sh
 
-unset DBUS_SESSION_BUS_ADDRESS
-unset SESSION_MANAGER
-unset WAYLAND_DISPLAY
-unset XDG_SESSION_DESKTOP
-unset XDG_CURRENT_DESKTOP
-unset DESKTOP_SESSION
-unset GDMSESSION
-
-export XDG_SESSION_TYPE=x11
-export XDG_CURRENT_DESKTOP=XFCE
-export XDG_SESSION_DESKTOP=xfce
-export DESKTOP_SESSION=xfce
-export GDMSESSION=xfce
-export GTK_USE_PORTAL=0
-
-if command -v dbus-run-session >/dev/null 2>&1; then
-    exec dbus-run-session -- startxfce4
-fi
-
-exec startxfce4
-EOF
-
-chmod 0755 /etc/xrdp/startwm.sh
+success "Installed /etc/xrdp/startwm.sh from the repository template."
 
 success "XRDP will start XFCE directly without loading the local Wayland environment."
 
