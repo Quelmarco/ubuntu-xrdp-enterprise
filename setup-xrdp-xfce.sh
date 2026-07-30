@@ -338,32 +338,16 @@ success "XRDP will start XFCE directly without loading the local Wayland environ
 
 readonly XSESSION_TEMPLATE="/etc/skel/.xsession"
 
-cat > "$XSESSION_TEMPLATE" <<'EOF'
-#!/bin/sh
+info "Installing XFCE user session template..."
 
-unset DBUS_SESSION_BUS_ADDRESS
-unset SESSION_MANAGER
-unset WAYLAND_DISPLAY
-unset XDG_SESSION_DESKTOP
-unset XDG_CURRENT_DESKTOP
-unset DESKTOP_SESSION
-unset GDMSESSION
+install \
+    -m 0700 \
+    -o root \
+    -g root \
+    "$XSESSION_SOURCE" \
+    "$XSESSION_TEMPLATE"
 
-export XDG_SESSION_TYPE=x11
-export XDG_CURRENT_DESKTOP=XFCE
-export XDG_SESSION_DESKTOP=xfce
-export DESKTOP_SESSION=xfce
-export GDMSESSION=xfce
-export GTK_USE_PORTAL=0
-
-if command -v dbus-run-session >/dev/null 2>&1; then
-    exec dbus-run-session -- startxfce4
-fi
-
-exec startxfce4
-EOF
-
-chmod 0700 "$XSESSION_TEMPLATE"
+success "Installed ${XSESSION_TEMPLATE} from the repository template."
 
 ###############################################################################
 # Disable xiccd for XRDP/XFCE users
