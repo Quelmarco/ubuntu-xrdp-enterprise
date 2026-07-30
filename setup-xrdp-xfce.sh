@@ -22,6 +22,13 @@
 set -Eeuo pipefail
 
 readonly SCRIPT_NAME="$(basename "$0")"
+readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readonly FILES_DIR="${SCRIPT_DIR}/files"
+
+readonly STARTWM_SOURCE="${FILES_DIR}/startwm.sh"
+readonly XSESSION_SOURCE="${FILES_DIR}/xsession"
+readonly XICCD_SOURCE="${FILES_DIR}/xiccd.desktop"
+
 readonly LOG_FILE="/var/log/xrdp-xfce-setup.log"
 readonly BACKUP_ROOT="/var/backups/xrdp-xfce"
 readonly TIMESTAMP="$(date '+%Y%m%d-%H%M%S')"
@@ -113,6 +120,19 @@ done
 ###############################################################################
 
 [[ ${EUID} -eq 0 ]] || fatal "Run this script as root using sudo."
+
+required_template_files=(
+    "$STARTWM_SOURCE"
+    "$XSESSION_SOURCE"
+    "$XICCD_SOURCE"
+)
+
+for template_file in "${required_template_files[@]}"; do
+    [[ -f "$template_file" ]] \
+        || fatal "Required template file not found: ${template_file}"
+done
+
+success "Required template files are available."
 
 install -d -m 0755 "$(dirname "$LOG_FILE")"
 touch "$LOG_FILE"
