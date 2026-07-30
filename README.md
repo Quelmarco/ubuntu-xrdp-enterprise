@@ -3,6 +3,11 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/queiprogetti/ubuntu-xrdp-enterprise)
 
+> ✅ Tested on Ubuntu Desktop 26.04
+> ✅ XRDP + Xorg
+> ✅ XFCE
+> ✅ Windows Remote Desktop (mstsc)
+
 Installer automatizzato per configurare un ambiente **XRDP multiutente con XFCE e Xorg** su Ubuntu Desktop 26.04.
 
 Il progetto nasce dal troubleshooting di workstation Ubuntu con GNOME, Wayland e GPU NVIDIA, dove GNOME Remote Desktop o una configurazione XRDP standard potevano produrre schermate nere o chiusure immediate della sessione.
