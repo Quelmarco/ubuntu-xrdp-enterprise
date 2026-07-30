@@ -44,7 +44,7 @@ sudo apt install -y git
 Scaricare l'intero repository:
 
 ```bash
-git clone https://github.com/Quelmarco/ubuntu-xrdp-enterprise.git
+git clone https://github.com/queiprogetti/ubuntu-xrdp-enterprise.git
 ```
 
 Entrare nella cartella del progetto:
