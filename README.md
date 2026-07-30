@@ -1,6 +1,7 @@
 # Ubuntu XRDP Enterprise
 
 ![License](https://img.shields.io/badge/license-MIT-green)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/queiprogetti/ubuntu-xrdp-enterprise)
 
 Installer automatizzato per configurare un ambiente **XRDP multiutente con XFCE e Xorg** su Ubuntu Desktop 26.04.
 
