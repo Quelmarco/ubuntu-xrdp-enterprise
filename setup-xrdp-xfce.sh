@@ -355,15 +355,16 @@ success "Installed ${XSESSION_TEMPLATE} from the repository template."
 
 install -d -m 0755 /etc/skel/.config/autostart
 
-cat > /etc/skel/.config/autostart/xiccd.desktop <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=xiccd
-Hidden=true
-X-GNOME-Autostart-enabled=false
-EOF
+info "Installing xiccd autostart override..."
 
-chmod 0644 /etc/skel/.config/autostart/xiccd.desktop
+install \
+    -m 0644 \
+    -o root \
+    -g root \
+    "$XICCD_SOURCE" \
+    /etc/skel/.config/autostart/xiccd.desktop
+
+success "Installed xiccd autostart override from the repository template."
 
 ###############################################################################
 # Existing-user configuration
