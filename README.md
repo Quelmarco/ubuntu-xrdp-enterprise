@@ -33,10 +33,24 @@ Il progetto nasce dal troubleshooting di workstation Ubuntu con GNOME, Wayland e
 
 ## Installazione rapida
 
-Scaricare lo script:
+## Installazione rapida
+
+Installare Git, se non è già presente:
 
 ```bash
-wget https://raw.githubusercontent.com/Quelmarco/ubuntu-xrdp-enterprise/main/setup-xrdp-xfce.sh
+sudo apt update
+sudo apt install -y git
+```
+Scaricare l'intero repository:
+
+```bash
+git clone https://github.com/Quelmarco/ubuntu-xrdp-enterprise.git
+```
+
+Entrare nella cartella del progetto:
+
+```bash
+cd ubuntu-xrdp-enterprise
 ```
 
 Renderlo eseguibile:
@@ -56,6 +70,9 @@ In alternativa:
 ```bash
 sudo bash setup-xrdp-xfce.sh
 ```
+
+[!IMPORTANT]
+Non scaricare soltanto setup-xrdp-xfce.sh: lo script richiede anche i file presenti nella cartella files/
 
 ## Opzione per disabilitare Wayland
 
