@@ -1,5 +1,7 @@
 # Ubuntu XRDP Enterprise
 
+![License](https://img.shields.io/badge/license-MIT-green)
+
 Installer automatizzato per configurare un ambiente **XRDP multiutente con XFCE e Xorg** su Ubuntu Desktop 26.04.
 
 Il progetto nasce dal troubleshooting di workstation Ubuntu con GNOME, Wayland e GPU NVIDIA, dove GNOME Remote Desktop o una configurazione XRDP standard potevano produrre schermate nere o chiusure immediate della sessione.
