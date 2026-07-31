@@ -75,8 +75,8 @@ In alternativa:
 sudo bash setup-xrdp-xfce.sh
 ```
 
-[!IMPORTANT]
-Non scaricare soltanto setup-xrdp-xfce.sh: lo script richiede anche i file presenti nella cartella files/
+> [!IMPORTANT][!IMPORTANT]
+> Non scaricare soltanto setup-xrdp-xfce.sh: lo script richiede anche i file presenti nella cartella files/
 
 ## Opzione per disabilitare Wayland
 
