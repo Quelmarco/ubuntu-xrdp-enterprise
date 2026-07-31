@@ -39,8 +39,6 @@ Il progetto nasce dal troubleshooting di workstation Ubuntu con GNOME, Wayland e
 
 ## Installazione rapida
 
-## Installazione rapida
-
 Installare Git, se non è già presente:
 
 ```bash
